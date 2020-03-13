@@ -371,6 +371,9 @@ def parse_arguments():
         "--dnnl_gpu_runtime", action='store', default='', type=str.lower,
         help="e.g. --dnnl_gpu_runtime ocl")
     parser.add_argument(
+        "--use_plaidml", action='store_true', 
+        help="Build with PlaidML.")
+    parser.add_argument(
         "--dnnl_opencl_root", action='store', default='',
         help="Path to OpenCL SDK. "
         "e.g. --dnnl_opencl_root \"C:/Program Files (x86)/IntelSWTools/sw_dev_tools/OpenCL/sdk\"")
@@ -759,6 +762,7 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
         "-Donnxruntime_ENABLE_WEBASSEMBLY_DEBUG_INFO=" + ("ON" if args.enable_wasm_debug_info else "OFF"),
         "-Donnxruntime_WEBASSEMBLY_MALLOC=" + args.wasm_malloc,
         "-Donnxruntime_ENABLE_EAGER_MODE=" + ("ON" if args.build_eager_mode else "OFF"),
+        "-Donnxruntime_USE_PLAIDML=" + ("ON" if args.use_plaidml else "OFF"),
     ]
 
     if args.enable_msvc_static_runtime:
