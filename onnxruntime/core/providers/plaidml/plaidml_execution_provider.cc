@@ -5,6 +5,9 @@
 #include "core/framework/compute_capability.h"
 #include "core/graph/model.h"
 
+// TODO: Actually use this
+#include "plaidml/edsl/edsl.h"
+
 #include "plaidml_execution_provider.h"
 
 namespace onnxruntime {
