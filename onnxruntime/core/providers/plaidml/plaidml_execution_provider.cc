@@ -26,6 +26,8 @@ std::vector<std::unique_ptr<ComputeCapability>> PlaidMLExecutionProvider::GetCap
 
   // TODO: This is a do-nothing stub. Implement!
 
+  throw std::runtime_error("TODO: PlaidMLExecutionProvider::GetCapability is not yet implemented");
+
   return result;
 }
 

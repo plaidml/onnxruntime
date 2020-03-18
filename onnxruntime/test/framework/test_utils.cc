@@ -41,6 +41,16 @@ IExecutionProvider* TestCoreMLExecutionProvider(uint32_t coreml_flags) {
 #endif
 
 static void CountOpsInGraphImpl(const Graph& graph, bool recurse_into_subgraphs, std::map<std::string, int>& ops) {
+#ifdef USE_PLAIDML
+IExecutionProvider* TestPlaidMLExecutionProvider() {
+  static PlaidMLExecutionProviderInfo info;
+  static PlaidMLExecutionProvider plaidml_provider(info);
+  return &plaidml_provider;
+}
+#endif
+
+
+static void CountOpsInGraphImpl(const Graph& graph, std::map<std::string, int>& ops) {
   for (auto& node : graph.Nodes()) {
     std::string key = node.Domain() + (node.Domain().empty() ? "" : ".") + node.OpType();
 

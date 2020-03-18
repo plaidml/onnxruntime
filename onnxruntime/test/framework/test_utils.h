@@ -27,6 +27,9 @@
 #ifdef USE_COREML
 #include "core/providers/coreml/coreml_execution_provider.h"
 #endif
+#ifdef USE_PLAIDML
+#include "core/providers/plaidml/plaidml_execution_provider.h"
+#endif
 
 namespace onnxruntime {
 class Graph;
@@ -48,6 +51,10 @@ IExecutionProvider* TestRknpuExecutionProvider();
 
 #ifdef USE_COREML
 IExecutionProvider* TestCoreMLExecutionProvider(uint32_t coreml_flags);
+#endif
+
+#ifdef USE_PLAIDML
+IExecutionProvider* TestPlaidMLExecutionProvider();
 #endif
 
 template <typename T>

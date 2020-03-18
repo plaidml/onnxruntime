@@ -43,6 +43,7 @@ std::unique_ptr<IExecutionProvider> DefaultCoreMLExecutionProvider();
 // EP for internal testing
 std::unique_ptr<IExecutionProvider> DefaultInternalTestingExecutionProvider(
     const std::unordered_set<std::string>& supported_ops);
+std::unique_ptr<IExecutionProvider> DefaultPlaidMLExecutionProvider();
 
 }  // namespace test
 }  // namespace onnxruntime

@@ -1114,6 +1114,7 @@ if (onnxruntime_USE_ROCM)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/../include/onnxruntime/core/providers/hip  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/onnxruntime/core/providers)
   set_target_properties(onnxruntime_providers_rocm PROPERTIES LINKER_LANGUAGE CXX)
 if (onnxruntime_USE_PLAIDML)
+  add_definitions(-DUSE_PLAIDML=1)
   file(GLOB_RECURSE onnxruntime_providers_plaidml_cc_srcs CONFIGURE_DEPENDS
     "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.h"
     "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.cc"

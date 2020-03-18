@@ -340,6 +340,15 @@ endif()
 set (ONNXRUNTIME_SHARED_LIB_TEST_SRC_DIR "${TEST_SRC_DIR}/shared_lib")
 set (ONNXRUNTIME_GLOBAL_THREAD_POOLS_TEST_SRC_DIR "${TEST_SRC_DIR}/global_thread_pools")
 set (ONNXRUNTIME_API_TESTS_WITHOUT_ENV_SRC_DIR "${TEST_SRC_DIR}/api_tests_without_env")
+if (onnxruntime_USE_PLAIDML)
+  file(GLOB_RECURSE onnxruntime_test_providers_plaidml_src CONFIGURE_DEPENDS
+    "${TEST_SRC_DIR}/providers/plaidml/*"
+    )
+  list(APPEND onnxruntime_test_providers_src ${onnxruntime_test_providers_plaidml_src})
+endif()
+
+set (ONNXRUNTIME_SHARED_LIB_TEST_SRC_DIR "${ONNXRUNTIME_ROOT}/test/shared_lib")
+set (ONNXRUNTIME_GLOBAL_THREAD_POOLS_TEST_SRC_DIR "${ONNXRUNTIME_ROOT}/test/global_thread_pools")
 
 set (onnxruntime_shared_lib_test_SRC
           ${ONNXRUNTIME_SHARED_LIB_TEST_SRC_DIR}/test_fixture.h
@@ -460,6 +469,12 @@ endif()
 
 if(onnxruntime_USE_ARMNN)
   list(APPEND onnxruntime_test_providers_dependencies onnxruntime_providers_armnn)
+if(onnxruntime_USE_PLAIDML)
+  list(APPEND onnxruntime_test_providers_dependencies onnxruntime_providers_plaidml)
+endif()
+
+if (onnxruntime_ENABLE_MICROSOFT_INTERNAL)
+  include(onnxruntime_unittests_internal.cmake)
 endif()
 
 if (onnxruntime_ENABLE_LANGUAGE_INTEROP_OPS)
@@ -480,6 +495,7 @@ set(ONNXRUNTIME_TEST_LIBS
     ${PROVIDERS_ARMNN}
     ${PROVIDERS_ROCM}
     ${PROVIDERS_COREML}
+    ${PROVIDERS_PLAIDML}
     onnxruntime_optimizer
     onnxruntime_providers
     onnxruntime_util

@@ -14,6 +14,18 @@
 #include "core/session/onnxruntime_cxx_api.h"
 
 namespace onnxruntime {
+
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_CPU(int use_arena);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_CUDA(OrtDevice::DeviceId device_id);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_Dnnl(int use_arena);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_NGraph(const char* ng_backend_type);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_Nuphar(bool, const char*);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_Nnapi();
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_Tensorrt(int device_id);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_OpenVINO(const char* device_id);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_ACL(int use_arena);
+std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_PlaidML();
+
 namespace test {
 
 std::unique_ptr<IExecutionProvider> DefaultCpuExecutionProvider(bool enable_arena) {
@@ -143,6 +155,9 @@ std::unique_ptr<IExecutionProvider> DefaultCoreMLExecutionProvider() {
   uint32_t coreml_flags = 0;
   coreml_flags |= COREML_FLAG_USE_CPU_ONLY;
   return CreateExecutionProviderFactory_CoreML(coreml_flags)->CreateProvider();
+std::unique_ptr<IExecutionProvider> DefaultPlaidMLExecutionProvider() {
+#ifdef USE_PLAIDML
+  return CreateExecutionProviderFactory_PlaidML()->CreateProvider();
 #else
   return nullptr;
 #endif

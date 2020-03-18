@@ -36,4 +36,6 @@
 #endif
 #ifdef USE_MIGRAPHX
 #include "core/providers/migraphx/migraphx_provider_factory.h"
+#ifdef USE_PLAIDML
+#include "core/providers/plaidml/plaidml_provider_factory.h"
 #endif
