@@ -21,6 +21,7 @@ constexpr const char* kNGraphDomain = "com.intel.ai";
 constexpr const char* kMIGraphXDomain = "";
 constexpr const char* kVitisAIDomain = "com.xilinx";
 
+constexpr const char* kPlaidMLDomain = "com.intel.plaidml";  // TODO: Do I actually want this?
 constexpr const char* kCpuExecutionProvider = "CPUExecutionProvider";
 constexpr const char* kCudaExecutionProvider = "CUDAExecutionProvider";
 constexpr const char* kDnnlExecutionProvider = "DnnlExecutionProvider";

@@ -7,6 +7,8 @@
 
 namespace onnxruntime {
 
+constexpr const char* PLAIDML = "PlaidML";  // TODO: Borrowed from OpenVINO. Reasonable?
+
 // Information needed to construct PlaidML execution providers.
 struct PlaidMLExecutionProviderInfo {
     // TODO: Empty for now. Forever?
