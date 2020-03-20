@@ -2,6 +2,10 @@
 // Licensed under the MIT License
 
 #include "core/providers/plaidml/plaidml_provider_factory.h"
+
+#include "plaidml/edsl/edsl.h"
+#include "plaidml/exec/exec.h"
+
 #include "plaidml_execution_provider.h"
 #include "core/session/abi_session_options_impl.h"
 
@@ -18,6 +22,8 @@ struct PlaidMLProviderFactory : IExecutionProviderFactory {
 };
 
 std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_PlaidML() {
+  plaidml::edsl::init();
+  plaidml::exec::init();
   return std::make_shared<onnxruntime::PlaidMLProviderFactory>();
 }
 
