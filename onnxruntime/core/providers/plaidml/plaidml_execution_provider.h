@@ -5,13 +5,30 @@
 
 #include "core/framework/execution_provider.h"
 
+namespace plaidml {
+namespace edsl {
+class Program;
+class Tensor;
+}  // namespace edsl
+}  // namespace plaidml
+
 namespace onnxruntime {
 
 constexpr const char* PLAIDML = "PlaidML";  // TODO: Borrowed from OpenVINO. Reasonable?
 
+struct PlaidMLProgram {
+  // A PlaidML Program bundled with its (ordered) input placeholder tensors
+  std::shared_ptr<plaidml::edsl::Program> program;
+  std::vector<plaidml::edsl::Tensor> inputs;
+};
+
+struct PlaidMLFunctionState {
+  std::shared_ptr<PlaidMLProgram> program = nullptr;
+};
+
 // Information needed to construct PlaidML execution providers.
 struct PlaidMLExecutionProviderInfo {
-    // TODO: Empty for now. Forever?
+    // TODO: Empty for now. Forever? -- if so we can scrap this struct altogether
 };
 
 class PlaidMLExecutionProvider : public IExecutionProvider {
