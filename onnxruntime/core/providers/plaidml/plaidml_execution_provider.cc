@@ -15,13 +15,18 @@ namespace onnxruntime {
 
 // TODO: Some of this stuff should probably be separated into new files
 std::vector<plaidml::edsl::Tensor> MakePlaidMLOp(
-    const ONNX_NAMESPACE::NodeProto& /*node*/,
+    const ONNX_NAMESPACE::NodeProto& node,
     const std::vector<plaidml::edsl::Tensor>& inputs) {
-  // TODO: THIS ASSUMES EVERY OP IS AN ELEMENTWISE ADD!! OBVIOUSLY THAT'S NOT TRUE!
+  // TODO: This needs to be _way_ more sophisticated (probably broken out into a parsing function and then many op-calling functions)
   if (inputs.size() != 2) {
     throw std::runtime_error(" TODO FORCED ABORT!: We have " + std::to_string(inputs.size()) + " inputs");
   }
-  return {inputs[0] + inputs[1]};
+  if (node.op_type() == "Add") {
+    return {inputs[0] + inputs[1]};
+  } else if (node.op_type() == "Mul") {
+    return {inputs[0] * inputs[1]};
+  }
+  throw std::runtime_error("Unable to handle operation " + node.op_type());
 }
 
 PlaidMLProgram MakePlaidMLProgram(const onnxruntime::Node* fused_node) {
