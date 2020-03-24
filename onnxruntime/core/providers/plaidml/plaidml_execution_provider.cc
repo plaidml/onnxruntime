@@ -10,24 +10,12 @@
 #include "core/framework/compute_capability.h"
 #include "core/graph/model.h"
 #include "core/session/onnxruntime_cxx_api.h"
+// #include "core/providers/plaidml/plaidml_ops.h"
+#include "plaidml_ops.h"
 
 namespace onnxruntime {
 
 // TODO: Some of this stuff should probably be separated into new files
-std::vector<plaidml::edsl::Tensor> MakePlaidMLOp(
-    const ONNX_NAMESPACE::NodeProto& node,
-    const std::vector<plaidml::edsl::Tensor>& inputs) {
-  // TODO: This needs to be _way_ more sophisticated (probably broken out into a parsing function and then many op-calling functions)
-  if (inputs.size() != 2) {
-    throw std::runtime_error(" TODO FORCED ABORT!: We have " + std::to_string(inputs.size()) + " inputs");
-  }
-  if (node.op_type() == "Add") {
-    return {inputs[0] + inputs[1]};
-  } else if (node.op_type() == "Mul") {
-    return {inputs[0] * inputs[1]};
-  }
-  throw std::runtime_error("Unable to handle operation " + node.op_type());
-}
 
 PlaidMLProgram MakePlaidMLProgram(const onnxruntime::Node* fused_node) {
   PlaidMLProgram ret;
@@ -57,17 +45,17 @@ PlaidMLProgram MakePlaidMLProgram(const onnxruntime::Node* fused_node) {
   //   * Get its inputs out of the `tensors` dict
   //   * Call `MakePlaidMLOp` and write results into `tensors` dict
   for (const auto& node : fused_node->GetFunctionBody()->Body().Nodes()) {
-    std::vector<plaidml::edsl::Tensor> local_input_tensors;
+    std::vector<plaidml::edsl::Value> local_input_tensors;
     for (const auto& local_input : node.InputDefs()) {
       try {
-        local_input_tensors.push_back(tensors.at(local_input->Name()));
+        local_input_tensors.push_back(plaidml::edsl::Value(tensors.at(local_input->Name())));
       } catch (const std::out_of_range& e) {
         throw std::runtime_error("Could not find expected tensor " + local_input->Name() + " [TODO better error handling]");
       }
     }
     ONNX_NAMESPACE::NodeProto node_proto;
     node.ToProto(node_proto);
-    auto local_output_tensors = MakePlaidMLOp(node_proto, local_input_tensors);
+    auto local_output_tensors = plaidml_ep::MakePlaidMLOp(node_proto, local_input_tensors);
     // Iterate over output tensors and names in tandem
     auto output_tensor_it = local_output_tensors.begin();
     for (const auto& local_output : node.OutputDefs()) {
