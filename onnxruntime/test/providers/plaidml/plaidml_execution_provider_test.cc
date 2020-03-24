@@ -17,9 +17,10 @@ void RunTest(
     const NameMLValMap& feeds,
     const std::vector<std::string>& output_names,
     const std::vector<std::vector<int64_t>>& expected_shapes,
-    const std::vector<std::vector<float>>& expected_values) {
+    const std::vector<std::vector<float>>& expected_values,
+    const Environment& env) {
   SessionOptions so;
-  InferenceSession session_object(so, &DefaultLoggingManager());
+  InferenceSession session_object(so, env);
 
   auto status = session_object.RegisterExecutionProvider(DefaultPlaidMLExecutionProvider());
   ASSERT_TRUE(status.IsOK()) << status.ErrorMessage();
@@ -78,7 +79,7 @@ TEST(PlaidMLExecutionProviderTest, Basic_Test) {
       {4}};
 
   // TODO: We're borrowing nGraph test data just to get something basic going, but switch to our own network & inputs eventually
-  RunTest("testdata/ngraph/Basic_Test.onnx", feeds, {"Z"}, expected_shapes, expected_values);
+  RunTest("testdata/ngraph/Basic_Test.onnx", feeds, {"Z"}, expected_shapes, expected_values, GetEnvironment());
 }
 
 }  // namespace test
