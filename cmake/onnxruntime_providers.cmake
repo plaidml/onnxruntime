@@ -1133,7 +1133,7 @@ if (onnxruntime_USE_PLAIDML)
   # To make the hack work: Make sure the temp env vars are set. First to root of PlaidML source;
   #       second to library location (which should be something your mac can find eg ~/lib)
   target_include_directories(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_DIR})
-  target_link_libraries(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_LIB_DIR}/libplaidml.dylib)
+  target_link_libraries(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_LIB_DIR})
 
 
 endif()

@@ -22,9 +22,9 @@ std::vector<MLFloat16> MakeMLFloat16(const std::initializer_list<float>& input) 
 
 TEST(MathOpTest, DimWithZeroHandling) {
   auto run = [](OpTester& tester) {
-    // exclude TensorRT and NNAPI as this isn't handled by those EPs
+    // exclude TensorRT, PlaidML and NNAPI as this isn't handled by those EPs
     tester.Run(OpTester::ExpectResult::kExpectSuccess, "",
-               {kTensorrtExecutionProvider, kNnapiExecutionProvider});
+               {kTensorrtExecutionProvider, kNnapiExecutionProvider, kPlaidMLExecutionProvider});
   };
 
   // test binary element-wise op broadcasting when there's a dim with value of zero
@@ -650,7 +650,7 @@ TEST(MathOpTest, Pow_Double) {
   test.AddOutput<double>("Z", dims,
                          {1.0, 256.0,
                           2.0, 1.0});
-  test.Run();
+  test.Run(OpTester::ExpectResult::kExpectSuccess);
 }
 
 TEST(MathOpTest, Pow_Broadcast_Scalar0) {

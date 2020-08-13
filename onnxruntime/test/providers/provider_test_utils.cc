@@ -836,6 +836,7 @@ void OpTester::Run(
         kNnapiExecutionProvider,
         kRocmExecutionProvider,
         kCoreMLExecutionProvider,
+        kPlaidMLExecutionProvider,
     };
 
     bool has_run = false;
@@ -928,6 +929,8 @@ void OpTester::Run(
           execution_provider = DefaultRocmExecutionProvider();
         else if (provider_type == onnxruntime::kCoreMLExecutionProvider)
           execution_provider = DefaultCoreMLExecutionProvider();
+        else if (provider_type == onnxruntime::kPlaidMLExecutionProvider)
+          execution_provider = DefaultPlaidMLExecutionProvider();
         // skip if execution provider is disabled
         if (execution_provider == nullptr)
           continue;
@@ -946,6 +949,9 @@ void OpTester::Run(
               provider_type == onnxruntime::kNupharExecutionProvider ||
               provider_type == onnxruntime::kNnapiExecutionProvider ||
               provider_type == onnxruntime::kCoreMLExecutionProvider)
+              provider_type == onnxruntime::kOpenVINOExecutionProvider ||
+              provider_type == onnxruntime::kNupharExecutionProvider ||
+              provider_type == onnxruntime::kPlaidMLExecutionProvider)
             continue;
           auto reg = execution_provider->GetKernelRegistry();
           if (!KernelRegistry::HasImplementationOf(*reg, node, execution_provider->Type())) {
