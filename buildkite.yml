@@ -1,0 +1,6 @@
+steps:
+  - command: "./build.sh"
+    label: ":pipeline:"
+    agents:
+      PLATFORM: linux_x86_64
+

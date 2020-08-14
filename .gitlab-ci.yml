@@ -1,0 +1,11 @@
+variables:
+  GIT_LFS_SKIP_SMUDGE: 1
+
+stages:
+  - build
+
+onnxruntime:
+  stage: build
+  script: python ci/bkpoke.py -- onnxruntime
+  tags: [linux_x86_64]
+
