@@ -34,7 +34,7 @@ PlaidML provides the [Tile eDSL](https://plaidml.readthedocs.io/en/latest/usage/
 
 The table below shows the ONNX layers created using Tile eDSL wrapper functions that translate onnx nodes into eDSL and generate MLIR code for the specified device, to provide the most efficient execution possible. PlaidML also provides an op library which has been built on top of Tile eDSL to facilitate developers, this library provides access to eDSL implementations of commonly used ML operations with an easy to use fluent API. The table below lists supported layers and corresponding eDSL op library functions employed. 
 
-TODO: distinguish between edsl, oplib and wrapper edsl functions 
+TODO (PlaidML): distinguish between edsl, oplib and wrapper edsl functions 
 
 | **ONNX Layers** | **eDSL Layers** | **CPU** |
 | --- | --- | --- | --- | --- | --- |
@@ -194,12 +194,12 @@ TODO: distinguish between edsl, oplib and wrapper edsl functions
 
 ## Topology Support
 
-TODO: add topology support here 
+TODO (PlaidML): add topology support here 
 
 ## How to run the ONNX node/model tests 
 
-TODO: add instructions on running onnx_
+TODO (PlaidML): add instructions on running onnx_
 
 ## Sample Inference Resnet50
 
-TODO:
+TODO (PlaidML):

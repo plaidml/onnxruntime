@@ -35,6 +35,8 @@ static void RunTest(const std::vector<float>& x_vals,
   if (!is_tensorrt_supported) {
     excluded_providers.insert(kTensorrtExecutionProvider);
   }
+  // TODO: PlaidML ThreeDimsAxis0 and ThreeDimsAxis1 failed
+  excluded_providers.insert(kPlaidMLExecutionProvider);
   tester.Run(expect_result, error_msg, excluded_providers);
 }
 

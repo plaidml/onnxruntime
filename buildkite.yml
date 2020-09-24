@@ -1,5 +1,5 @@
 steps:
-  - command: "./build.sh"
+  - command: "./plaidml_build_onnx_node_tests.sh"
     label: ":pipeline:"
     agents:
       PLATFORM: linux_x86_64

@@ -149,13 +149,13 @@ TEST(ConvTest, Conv1D_2) {
 // Conv1
 TEST(ConvTest, Conv1D_Bias) {
   ConvOpAndTestAttributes attrs = {
-      "",                     // auto_pad
-      vector<int64_t>{2},     // dilations
-      1,                      // group
-      vector<int64_t>{1},     // kernel_shape
-      vector<int64_t>{1, 1},  // pads
-      vector<int64_t>{3},     // strides
-      {}                      // excluded EPs
+      "",                         // auto_pad
+      vector<int64_t>{2},         // dilations
+      1,                          // group
+      vector<int64_t>{1},         // kernel_shape
+      vector<int64_t>{1, 1},      // pads
+      vector<int64_t>{3},         // strides
+      {kPlaidMLExecutionProvider} // excluded EPs
   };
 
   vector<float> X = {0.4582272171974182f, 0.3877705931663513f, -0.05413919687271118f, -0.3013981878757477f,
@@ -187,7 +187,7 @@ TEST(ConvTest, Conv2D_1) {
       vector<int64_t>{3, 3},        // kernel_shape
       vector<int64_t>{1, 1, 1, 2},  // pads
       vector<int64_t>{3, 1},        // strides
-      {}                            // excluded EPs
+      {kPlaidMLExecutionProvider}   // excluded EPs
   };
 
   vector<float> X = {-0.09103918075561523f, -0.32513630390167236f};
@@ -309,7 +309,7 @@ TEST(ConvTest, Conv2D_Bias_1) {
       vector<int64_t>{2, 2},        // kernel_shape
       vector<int64_t>{0, 0, 0, 0},  // pads
       vector<int64_t>{1, 1},        // strides
-      {}                            // excluded EPs
+      {kPlaidMLExecutionProvider}   // excluded EPs
   };
 
   vector<float> X = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
@@ -336,7 +336,7 @@ TEST(ConvTest, Conv2D_Bias_2) {
       vector<int64_t>{4, 4},        // kernel_shape
       vector<int64_t>{1, 2, 3, 1},  // pads
       vector<int64_t>{2, 3},        // strides
-      {}                            // excluded EPs
+      {kPlaidMLExecutionProvider}   // excluded EPs
   };
 
   vector<float> X = {-0.22904816269874573f, -0.20278319716453552f, -0.4723144471645355f, 0.027880489826202393f,
@@ -531,7 +531,7 @@ TEST(ConvTest, Conv3D_Bias) {
       vector<int64_t>{2, 2, 2},           // kernel_shape
       vector<int64_t>{2, 2, 2, 2, 2, 2},  // pads
       vector<int64_t>{2, 2, 2},           // strides
-      {}                                  // excluded EPs
+      {kPlaidMLExecutionProvider}         // excluded EPs
   };
 
   vector<float> X = {0.46796226501464844f, -0.4613912105560303f, 0.33512794971466064f, -0.4010460674762726f,
@@ -614,7 +614,7 @@ TEST(ConvTest, Conv2D_group) {
       vector<int64_t>{1, 1},        // kernel_shape
       vector<int64_t>{0, 0, 0, 0},  // pads
       vector<int64_t>{1, 1},        // strides
-      {}                            // excluded EPs
+      {kPlaidMLExecutionProvider}   // excluded EPs
   };
 
   vector<float> X = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 17.0f};
@@ -638,7 +638,7 @@ TEST(ConvTest, ConvDimWithZero) {
       vector<int64_t>{1, 1},        // kernel_shape
       vector<int64_t>{0, 0, 0, 0},  // pads
       vector<int64_t>{1, 1},        // strides
-      {}                            // excluded EPs
+      {kPlaidMLExecutionProvider}   // excluded EPs
   };
 
   vector<float> X = vector<float>();

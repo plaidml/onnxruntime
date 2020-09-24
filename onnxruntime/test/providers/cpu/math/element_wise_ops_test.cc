@@ -403,6 +403,21 @@ TEST(MathOpTest, Sub_Broadcast_Scalar) {
   run(true);
 }
 
+TEST(MathOpTest, Sub_Broadcast_Scalar_int32) {
+  OpTester test("Sub");
+  std::vector<int64_t> dims{3, 3};
+  test.AddInput<int32_t>("A", dims,
+                         {1, 2, -1,
+                          0, 1, -100,
+                          -5, 9, -10000});
+  test.AddInput<int32_t>("B", {}, {5});
+  test.AddOutput<int32_t>("C", dims,
+                          {-4, -3, -6,
+                           -5, -4, -105,
+                           -10, 4, -10005});
+  test.Run(OpTester::ExpectResult::kExpectSuccess, "", {kNnapiExecutionProvider});  // NNAPI: Sub does not support scalar input
+}
+
 TEST(MathOpTest, Mul_int32) {
   OpTester test("Mul");
   test.AddInput<int32_t>("A", {3}, {1, 2, 3});

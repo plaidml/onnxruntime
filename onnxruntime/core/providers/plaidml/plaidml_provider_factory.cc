@@ -28,7 +28,7 @@ std::shared_ptr<IExecutionProviderFactory> CreateExecutionProviderFactory_PlaidM
 }
 
 }  // namespace onnxruntime
-//TODO:do we need device id here? 
+// TODO (PlaidML): do we need device id here?
 ORT_API_STATUS_IMPL(OrtSessionOptionsAppendExecutionProvider_PlaidML,
                     _In_ OrtSessionOptions* options) {
   options->provider_factories.push_back(

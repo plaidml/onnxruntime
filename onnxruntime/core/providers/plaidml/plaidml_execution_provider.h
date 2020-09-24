@@ -5,30 +5,28 @@
 
 #include "core/framework/execution_provider.h"
 
-namespace plaidml {
-namespace edsl {
-class Program;
-class Tensor;
-}  // namespace edsl
-}  // namespace plaidml
+#include "core/framework/allocatormgr.h"
+#include "core/framework/compute_capability.h"
+#include "core/graph/model.h"
+#include "core/session/onnxruntime_cxx_api.h"
+
+#include "plaidml_node.h"
+#include "plaidml_ops.h"
+
+#include <stdio.h>
+#include <string.h>
 
 namespace onnxruntime {
 
-constexpr const char* PLAIDML = "PlaidML";  // TODO: Borrowed from OpenVINO. Reasonable?
-
-struct PlaidMLProgram {
-  // A PlaidML Program bundled with its (ordered) input placeholder tensors
-  std::shared_ptr<plaidml::edsl::Program> program;
-  std::vector<plaidml::edsl::Tensor> inputs;
-};
+constexpr const char* PLAIDML = "PlaidML";  // TODO (PlaidML): Borrowed from OpenVINO. Reasonable?
 
 struct PlaidMLFunctionState {
-  std::shared_ptr<PlaidMLProgram> program = nullptr;
+  std::shared_ptr<plaidml_ep::PlaidMLProgram> program = nullptr;
 };
 
 // Information needed to construct PlaidML execution providers.
 struct PlaidMLExecutionProviderInfo {
-    // TODO: Empty for now. Forever? -- if so we can scrap this struct altogether
+  // TODO (PlaidML): Empty for now. Forever? -- if so we can scrap this struct altogether
 };
 
 class PlaidMLExecutionProvider : public IExecutionProvider {
@@ -44,7 +42,7 @@ class PlaidMLExecutionProvider : public IExecutionProvider {
                  std::vector<NodeComputeInfo>& node_compute_funcs) override;
 
  private:
-  // TODO: PlaidML-specific state goes here; if info_ is truly empty, don't need it here
+  // TODO (PlaidML): -specific state goes here; if info_ is truly empty, don't need it here
   // PlaidMLExecutionProviderInfo info_;
 };
 
