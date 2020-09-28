@@ -32,7 +32,7 @@ else
 # build setup ('bazelisk build //plaidml:plaidml' previously shlib) (see pull 1335)
 # fix required to get this working on mac again 
 # to run locally on mac use plaidml-v1 commit #(236c0c44d985d320e36f208c8e5f3c671996b27a)
-    echo "Error: This buld required Linux"
+    echo "Error: This buld requires Linux"
 fi
 cd ../../
 # Build onnxruntime with plaidml execution provider support 
