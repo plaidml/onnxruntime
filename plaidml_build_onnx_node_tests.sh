@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is a temporary file created for a Gitlab pipeline
+# This is a temporary file created for a Github pipeline
 # This file will be deleted once this branch is finalized 
 
 # This file contains commands that build onnxruntime with plaidml execution 
@@ -19,19 +19,17 @@ git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git
 cd build/plaidml/
 ./configure
 conda activate .cenv/
-bazelisk build plaidml:shlib
+bazelisk build //plaidml:plaidml
 conda deactivate
-
-
 # Set environment variables so that onnxruntime can find plaidml 
+export TODO_TEMP_PLAIDML_DIR=$PWD
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; 
 then
-    export TODO_TEMP_PLAIDML_DIR=$PWD
-    export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.so
+  export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.so
 elif [[ "$OSTYPE" == "darwin"* ]]; 
 then
-    export TODO_TEMP_PLAIDML_DIR=$PWD
-    export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.dylib
+  export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-out/darwin_x86_64-opt/bin/plaidml/libplaidml.dylib  
 fi
 
 cd ../../
