@@ -18,34 +18,18 @@ git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git
 cd build/plaidml/
 ./configure
 conda activate .cenv/
-bazelisk build plaidml:shlib
+bazelisk build //plaidml:plaidml
 conda deactivate
-cd ../../
+export TODO_TEMP_PLAIDML_DIR=$PWD
+
 
 # Set environment variables so that onnxruntime can find plaidml 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; 
 then
-    ./configure
-    conda activate .cenv/
-    bazelisk build //plaidml:plaidml
-    conda deactivate
-    export TODO_TEMP_PLAIDML_DIR=$PWD
     export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.so
 elif [[ "$OSTYPE" == "darwin"* ]]; 
 then
-# TODO (PlaidML): dylib is no longer produced for plaidml through the bazel 
-# build setup ('bazelisk build //plaidml:plaidml' previously shlib) (see pull 1335)
-# fix required to get this working on mac again 
-# for now going back in time for development ease on mac. 
-# Any plaidml testing done on mac using this setup is now obsolete unless retested on 
-# linux with latest plaidml build 
-    git checkout 236c0c44d985d320e36f208c8e5f3c671996b27a
-    ./configure
-    conda activate .cenv/
-    bazelisk build //plaidml:shlib
-    conda deactivate
-    export TODO_TEMP_PLAIDML_DIR=$PWD
-    export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.dylib
+    export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-out/darwin_x86_64-opt/bin/plaidml/libplaidml.dylib
 fi
 
 # Build onnxruntime with plaidml execution provider support 
