@@ -141,6 +141,9 @@ std::vector<plaidml::edsl::Tensor> min(const std::vector<plaidml::edsl::Value>& 
 std::vector<plaidml::edsl::Tensor> sum(const std::vector<plaidml::edsl::Value>& args);
 
 //---------------------------------------other ops
+std::vector<plaidml::edsl::Tensor> _batch_normalization(
+    const ONNX_NAMESPACE::NodeProto& node,
+    const std::vector<plaidml::edsl::Value>& inputs);
 std::vector<plaidml::edsl::Tensor> _cast(
     const ONNX_NAMESPACE::NodeProto& node,
     const std::vector<plaidml::edsl::Value>& inputs);

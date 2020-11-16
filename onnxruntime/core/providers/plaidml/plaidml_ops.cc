@@ -67,6 +67,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"ArgMax", _argmax,}, // TODO (PlaidML): fix broken tests (7/7 failures )
         //{"ArgMin", _argmin,},  // TODO (PlaidML): fix (4/5 failures)
         {"AveragePool", _average_pool},  // TODO (PlaidML): fix broken tests (1/4 failures)
+        {"BatchNormalization", _batch_normalization},
         //{"Cast",_cast}, // TODO (PlaidML): OP WIP
         //{"Clip", _clip}, // TODO (PlaidML): fix broken tests (int8) incorrect docs in onnx has min max attributes not inputs
         {"Conv", _conv},                 // TODO (PlaidML): fix broken tests (6/17 failures)
@@ -486,6 +487,36 @@ std::vector<plaidml::edsl::Tensor> _average_pool(
                                   use_ceil);
 
   return {result};
+}
+
+std::vector<plaidml::edsl::Tensor> _batch_normalization(
+    const ONNX_NAMESPACE::NodeProto& node,
+    const std::vector<plaidml::edsl::Value>& inputs) {
+  const auto& X = inputs[0].as_tensor();
+  auto scale = inputs[1].as_tensor();
+  auto B = inputs[2].as_tensor();
+  auto mean = inputs[3].as_tensor();
+  auto var = inputs[4].as_tensor();
+  auto pnode = plaidml_ep::PlaidMLNode(node);
+  std::vector<int> att_axes;
+  // attributes spacial, epsilon
+  // inputs x,scale,b,mean,var
+
+  // TODO (PlaidML): Handle 'spacial' attribute for opsets 8 and below.
+  // auto spacial = pnode.get_int_attribute("spacial",0);//opset 8 and below
+  // TODO (PlaidML): Handle 'momentum' attribute
+  // auto momentum = pnode.get_float_attribute("momentum",0.9);
+  auto epsilon = pnode.get_float_attribute("epsilon",1e-05);
+ 
+  while (scale.rank() < X.rank() - 1) 
+  {
+    scale = plaidml::op::unsqueeze(scale, {1});
+    B = plaidml::op::unsqueeze(B, {1});
+    mean = plaidml::op::unsqueeze(mean, {1});
+    var = plaidml::op::unsqueeze(var, {1});
+  }
+  // if exception encountered return 
+  return {(scale * ((X - mean) / plaidml::edsl::sqrt(var + epsilon)) + B)};
 }
 
 // TODO (PlaidML): OP WIP
