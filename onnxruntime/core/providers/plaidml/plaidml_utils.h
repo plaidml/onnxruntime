@@ -4,8 +4,9 @@
 #include "core/graph/onnx_protobuf.h"
 
 namespace plaidml {
-namespace edsl {
 class Program;
+class Buffer;
+namespace edsl {
 class Tensor;
 class Value;
 }  // namespace edsl

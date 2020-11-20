@@ -109,7 +109,7 @@ PlaidMLProgram::PlaidMLProgram(const onnxruntime::Node* fused_node) : _fused_nod
     _program_outputs.push_back(output.as_tensor());
   }
 
-  program = std::make_shared<plaidml::edsl::Program>(plaidml::edsl::ProgramBuilder(fused_node->Name(), _program_outputs).compile());
+  program = std::make_shared<plaidml::Program>(plaidml::edsl::buildProgram(fused_node->Name(), _program_inputs,_program_outputs));
 }
 
 /* returns the input shapes of a node from the tensor dictionary */

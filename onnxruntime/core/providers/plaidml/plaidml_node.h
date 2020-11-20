@@ -37,7 +37,7 @@ class PlaidMLProgram {
   plaidml::edsl::Value get_value_from_dictionary(const std::string& name);
   bool add_value_to_dictionary(const std::string& name, plaidml::edsl::Value val);
 
-  std::shared_ptr<plaidml::edsl::Program> program;
+  std::shared_ptr<plaidml::Program> program;
 
  private:
   std::vector<plaidml::edsl::Tensor> _program_inputs;

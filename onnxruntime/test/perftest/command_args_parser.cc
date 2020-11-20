@@ -172,7 +172,9 @@ static bool ParseDimensionOverride(std::basic_string<ORTCHAR_T>& dim_identifier,
           test_config.machine_config.provider_type_name = onnxruntime::kAclExecutionProvider;
         } else if (!CompareCString(optarg, ORT_TSTR("armnn"))) {
           test_config.machine_config.provider_type_name = onnxruntime::kArmNNExecutionProvider;
-        } else {
+        }else if(!CompareCString(optarg, ORT_TSTR("plaidml"))){
+          test_config.machine_config.provider_type_name = onnxruntime::kPlaidMLExecutionProvider;
+        }else {
           return false;
         }
         break;
