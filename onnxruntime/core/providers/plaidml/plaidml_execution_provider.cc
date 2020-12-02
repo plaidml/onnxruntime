@@ -122,23 +122,19 @@ common::Status PlaidMLExecutionProvider::Compile(
           Ort::CustomOpApi ort{*api};
           // TODO (PlaidML): why is this using custom op api? is it necessary ? is there a neater way?
           auto pml_state = static_cast<PlaidMLFunctionState*>(state);
-          //auto binder = plaidml::exec::Binder(*pml_state->program->program);
           pml_state->program->program->compile();
           // Load input data
-          //auto executable = binder.compile();
           auto executable = plaidml::exec::Executable(*pml_state->program->program);
 
           unsigned input_idx = 0;
           std::vector<plaidml::Buffer> inputs;
           std::vector<plaidml::Buffer> outputs;
 
-          // for (auto input_arg : pml_state->program->program->inputs()) {
-          //   plaidml::Buffer buffer(input_arg);
-          //   inputs.emplace_back(buffer);
-          // }
+          for (auto input_arg : pml_state->program->program->inputs()) {
+            inputs.emplace_back(plaidml::Buffer(input_arg));
+          }
           for (auto output_arg : pml_state->program->program->outputs()) {
-            plaidml::Buffer buffer(output_arg);
-            outputs.emplace_back(buffer);
+            outputs.emplace_back(plaidml::Buffer(output_arg));
           }
           //auto input_shapes = pml_state->program->program->inputs();
           for (auto input_placeholder : pml_state->program->get_program_inputs()) {
@@ -147,10 +143,7 @@ common::Status PlaidMLExecutionProvider::Compile(
             // on the matching input order
             const OrtValue* input_value = ort.KernelContext_GetInput(context, input_idx++);
             void* input_data = const_cast<void*>(ort.GetTensorData<void>(input_value));
-            plaidml::Buffer buffer(input_placeholder.compute_shape());
-            buffer.copy_from(input_data);
-            inputs.emplace_back(buffer);
-            //inputs[input_idx].copy_from(input_data);
+            inputs[input_idx-1].copy_from(input_data);
           }
 
           plaidml::init();
@@ -165,7 +158,7 @@ common::Status PlaidMLExecutionProvider::Compile(
           std::vector<int64_t> ort_shape = output_arg.sizes();
           OrtValue* output_value = ort.KernelContext_GetOutput(context, output_idx++, ort_shape.data(), ort_shape.size());
           void* output_data = ort.GetTensorMutableData<void>(output_value);
-          outputs[output_idx].copy_into(output_data);
+          outputs[output_idx-1].copy_into(output_data);
           }
           return Status::OK();
         };
