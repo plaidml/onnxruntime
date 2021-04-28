@@ -39,16 +39,16 @@ std::map<std::string, OpFunction> kSupportedOps = {
     {"Min", min},
     {"Mul", mul},
     {"Neg", neg},
-    {"Not", logical_not},
+    // new failure {"Not", logical_not}, // TODO (PlaidML): fix broken tests 
     {"Or", logical_or},
-    //{"Pow", pow}, // TODO (PlaidML): fix broken tests (double)
+    // new failures {"Pow", pow}, // TODO (PlaidML): fix broken tests (double) new->(int64, int32)
     {"PRelu", prelu},
     {"Reciprocal", reciprocal},
     {"Relu", relu},
     //{"Reshape", reshape}, // TODO (PlaidML): OP WIP
     {"SampleOp", sample_op},
     //{"Shape", shape}, // TODO (PlaidML): fix broken tests (11/11 failures)
-    //{"Sigmoid", sigmoid}, failing after new build (operation not registered error )
+    {"Sigmoid", sigmoid},
     //{"Sign", sign}, // TODO (PlaidML): fix broken tests (4/5 failures) double uint64 int64 float16 are broken, float works
     {"Sin", sin},
     {"Sinh", sinh},
@@ -59,7 +59,7 @@ std::map<std::string, OpFunction> kSupportedOps = {
     {"Tanh", tanh},
     //{"Tile", tile,}, // TODO (PlaidML): OP WIP (11/11 failures)
     {"Where", where},  // TODO (PlaidML): fix broken tests (3/4 failures)
-                       //{"Xor", logical_xor,}, // TODO (PlaidML): fix broken tests (2/2 failures)
+    //{"Xor", logical_xor,}, // TODO (PlaidML): fix broken tests (2/2 failures)
 };
 
 std::map<std::string, _OpFunction> _kSupportedOps =
@@ -67,7 +67,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"ArgMax", _argmax,}, // TODO (PlaidML): fix broken tests (7/7 failures )
         //{"ArgMin", _argmin,},  // TODO (PlaidML): fix (4/5 failures)
         {"AveragePool", _average_pool},  // TODO (PlaidML): fix broken tests (1/4 failures)
-        {"BatchNormalization", _batch_normalization},
+        // new failures {"BatchNormalization", _batch_normalization}, // failed tests:  InvalidScaleDim, InvalidBDim, InvalidMeanDim, InvalidVarDim
         //{"Cast",_cast}, // TODO (PlaidML): OP WIP
         //{"Clip", _clip}, // TODO (PlaidML): fix broken tests (int8) incorrect docs in onnx has min max attributes not inputs
         {"Conv", _conv},                 // TODO (PlaidML): fix broken tests (6/17 failures)
@@ -77,16 +77,16 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         {"Elu", _elu},
         //{"EyeLike",_eye_like}, // TODO (PlaidML): OP WIP
         {"Flatten", _flatten},
-        {"HardSigmoid", _hard_sigmoid},
+        // new failure {"HardSigmoid", _hard_sigmoid}, TODO (PlaidML): fix brokwn tests (edsl::select cast issue)
         {"LeakyRelu", _leaky_relu},
         {"LogSoftmax", _log_softmax},  // TODO (PlaidML): fix broken tests (2/7 failures)
-        {"LpNormalization", _lp_normalization},
+        // new failures {"LpNormalization", _lp_normalization}, // failed L1Normalization, L1NormalizationWithValidNegativeAxis
         //{"LRN",_lrn}, // TODO (PlaidML): fix broken tests (2/2 failures)
         {"MaxPool", _maxpool},  // TODO (PlaidML): fix broken tests (multiple outputs, attribute handling)
         //{"Mod",_mod}, // TODO (PlaidML): fix broken tests (6/15 failures)
         //{"OneHot",_one_hot}, // TODO (PlaidML): OP WIP
-        {"ReduceMax", _reduce_max},
-        {"ReduceMean", _reduce_mean},
+        // new failures {"ReduceMax", _reduce_max}, // failed tests: ReduceMax_int64
+        // new failures {"ReduceMean", _reduce_mean}, // failed tests: ReduceMean_int32
         {"ReduceMin", _reduce_min},
         {"ReduceProd", _reduce_prod},
         {"ReduceSum", _reduce_sum},
@@ -96,7 +96,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"Softmax",_softmax}, // TODO (PlaidML): fix broken tests (2/8 failures)
         //{"Split",_split}, // TODO (PlaidML): failing split OP WIP
         //{"Squeeze",_squeeze}, // TODO (PlaidML): fix broken tests (5/10 failures)(segfault)
-        //{"ThresholdedRelu",_thresholded_relu}, // TODO (PlaidML): fix broken tests (new failure! op not registered )
+        {"ThresholdedRelu",_thresholded_relu}, // TODO (PlaidML): fix broken tests (new failure! op not registered )
         {"Transpose", _transpose},  // TODO (PlaidML): fix broken tests (8/17 failures)
         {"Unsqueeze", _unsqueeze},
 
@@ -503,7 +503,7 @@ std::vector<plaidml::edsl::Tensor> _batch_normalization(
   // inputs x,scale,b,mean,var
 
   // TODO (PlaidML): Handle 'spacial' attribute for opsets 8 and below.
-  // auto spacial = pnode.get_int_attribute("spacial",0);//opset 8 and below
+  // auto spatial = pnode.get_int_attribute("spatial",0);//opset 8 and below
   // TODO (PlaidML): Handle 'momentum' attribute
   // auto momentum = pnode.get_float_attribute("momentum",0.9);
   auto epsilon = pnode.get_float_attribute("epsilon",1e-05);
@@ -566,9 +566,9 @@ std::vector<plaidml::edsl::Tensor> _cast(
     case onnx::TensorProto::DOUBLE:
       plaidml_type = plaidml::DType::FLOAT64;
       break;
-    case onnx::TensorProto::BFLOAT16:
-      plaidml_type = plaidml::DType::BFLOAT16;
-      break;
+    // case onnx::TensorProto::BFLOAT16:
+    //   plaidml_type = plaidml::DType::BFLOAT16;
+    //   break;
     case onnx::TensorProto::STRING:
     case onnx::TensorProto::COMPLEX64:
     case onnx::TensorProto::COMPLEX128:

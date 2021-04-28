@@ -20,8 +20,8 @@ START=$(date +%s)
 
 git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git ./build/plaidml
 cd build/plaidml/
-# TODO (PlaidML): update all ops to new eDSL API
-git checkout f912a9007e7750c8328b5a9fcb0609848610de13 
+# TODO (PlaidML): update all ops to new eDSL API 
+# TODO (PlaidML): update to match new onnx op names 
 ./configure
 conda activate .cenv/
 bazelisk build //plaidml:plaidml

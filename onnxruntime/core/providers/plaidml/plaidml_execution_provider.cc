@@ -139,7 +139,7 @@ common::Status PlaidMLExecutionProvider::Compile(
           //auto input_shapes = pml_state->program->program->inputs();
           for (auto input_placeholder : pml_state->program->get_program_inputs()) {
             // program->inputs and ORT inputs are in the same order, so these match
-            // TODO (PlaidML): check if a lookup method is required here or it is sufficient to reply
+            // TODO (PlaidML): check if a lookup method is required here or it is sufficient to rely
             // on the matching input order
             const OrtValue* input_value = ort.KernelContext_GetInput(context, input_idx++);
             void* input_data = const_cast<void*>(ort.GetTensorData<void>(input_value));
@@ -150,15 +150,15 @@ common::Status PlaidMLExecutionProvider::Compile(
           plaidml::edsl::init();
           plaidml::op::init();
           plaidml::exec::init();
-          executable.run(inputs,outputs);
+          executable.run(inputs, outputs);
 
-          //Write output data
+          // Write output data
           unsigned output_idx = 0;
           for (auto output_arg : pml_state->program->program->outputs()) {
-          std::vector<int64_t> ort_shape = output_arg.sizes();
-          OrtValue* output_value = ort.KernelContext_GetOutput(context, output_idx++, ort_shape.data(), ort_shape.size());
-          void* output_data = ort.GetTensorMutableData<void>(output_value);
-          outputs[output_idx-1].copy_into(output_data);
+            std::vector<int64_t> ort_shape = output_arg.sizes();
+            OrtValue* output_value = ort.KernelContext_GetOutput(context, output_idx++, ort_shape.data(), ort_shape.size());
+            void* output_data = ort.GetTensorMutableData<void>(output_value);
+            outputs[output_idx-1].copy_into(output_data);
           }
           return Status::OK();
         };
