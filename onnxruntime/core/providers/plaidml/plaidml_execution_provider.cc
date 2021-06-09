@@ -143,7 +143,7 @@ common::Status PlaidMLExecutionProvider::Compile(
             // on the matching input order
             const OrtValue* input_value = ort.KernelContext_GetInput(context, input_idx++);
             void* input_data = const_cast<void*>(ort.GetTensorData<void>(input_value));
-            inputs[input_idx-1].copy_from(input_data);
+            inputs[input_idx - 1].copy_from(input_data);
           }
 
           plaidml::init();
@@ -158,7 +158,7 @@ common::Status PlaidMLExecutionProvider::Compile(
             std::vector<int64_t> ort_shape = output_arg.sizes();
             OrtValue* output_value = ort.KernelContext_GetOutput(context, output_idx++, ort_shape.data(), ort_shape.size());
             void* output_data = ort.GetTensorMutableData<void>(output_value);
-            outputs[output_idx-1].copy_into(output_data);
+            outputs[output_idx - 1].copy_into(output_data);
           }
           return Status::OK();
         };

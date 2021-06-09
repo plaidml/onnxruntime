@@ -30,26 +30,26 @@ std::map<std::string, OpFunction> kSupportedOps = {
     {"Exp", exp},
     {"Floor", floor},
     {"Greater", greater},
-    //{"Identity", identity}, // TODO (PlaidML): broken test (1/2 failures) (string type needed)//need to enable for Loop, scan9 etc tests
+    //{"Identity", identity}, // TODO (PlaidML): broken test (1/2 failures) (string type needed) | Scan8.MixedTypeInputs | Loop.IterationCountAsOutput | Loop.Opset11WithNoVariadicInputsAndOutputs | Loop.SubgraphTypeOverride
     {"Less", less},
     {"Log", log},
     {"Max", max},
     {"Mean", mean},
-    //{"MatMul", matmul}, // TODO (PlaidML): OP WIP
+    //{"MatMul", matmul}, // TODO (PlaidML): OP WIP output shape mismatch: Expected output shape [{3,2,1,2}] did not match run output shape [{3,1,1,2,2}]
     {"Min", min},
     {"Mul", mul},
     {"Neg", neg},
-    // new failure {"Not", logical_not}, // TODO (PlaidML): fix broken tests 
+    {"Not", logical_not},  // TODO (PlaidML): fix broken tests
     {"Or", logical_or},
-    // new failures {"Pow", pow}, // TODO (PlaidML): fix broken tests (double) new->(int64, int32)
+    //{"Pow", pow}, // TODO (PlaidML): fix broken tests (double) new->(int64, int32)
     {"PRelu", prelu},
     {"Reciprocal", reciprocal},
     {"Relu", relu},
     //{"Reshape", reshape}, // TODO (PlaidML): OP WIP
     {"SampleOp", sample_op},
-    //{"Shape", shape}, // TODO (PlaidML): fix broken tests (11/11 failures)
+    //{"Shape", shape}, // TODO (PlaidML): fix broken tests (11/11 failures) incorrect values produced
     {"Sigmoid", sigmoid},
-    //{"Sign", sign}, // TODO (PlaidML): fix broken tests (4/5 failures) double uint64 int64 float16 are broken, float works
+    {"Sign", sign},  // TODO (PlaidML): fix broken tests (4/5 failures) double uint64 int64 float16 are broken, float works
     {"Sin", sin},
     {"Sinh", sinh},
     {"Sqrt", sqrt},
@@ -59,7 +59,7 @@ std::map<std::string, OpFunction> kSupportedOps = {
     {"Tanh", tanh},
     //{"Tile", tile,}, // TODO (PlaidML): OP WIP (11/11 failures)
     {"Where", where},  // TODO (PlaidML): fix broken tests (3/4 failures)
-    //{"Xor", logical_xor,}, // TODO (PlaidML): fix broken tests (2/2 failures)
+                       //{"Xor", logical_xor,}, // TODO (PlaidML): fix broken tests (2/2 failures)
 };
 
 std::map<std::string, _OpFunction> _kSupportedOps =
@@ -67,7 +67,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"ArgMax", _argmax,}, // TODO (PlaidML): fix broken tests (7/7 failures )
         //{"ArgMin", _argmin,},  // TODO (PlaidML): fix (4/5 failures)
         {"AveragePool", _average_pool},  // TODO (PlaidML): fix broken tests (1/4 failures)
-        // new failures {"BatchNormalization", _batch_normalization}, // failed tests:  InvalidScaleDim, InvalidBDim, InvalidMeanDim, InvalidVarDim
+        //{"BatchNormalization", _batch_normalization}, // failed tests:  InvalidScaleDim, InvalidBDim, InvalidMeanDim, InvalidVarDim
         //{"Cast",_cast}, // TODO (PlaidML): OP WIP
         //{"Clip", _clip}, // TODO (PlaidML): fix broken tests (int8) incorrect docs in onnx has min max attributes not inputs
         {"Conv", _conv},                 // TODO (PlaidML): fix broken tests (6/17 failures)
@@ -77,26 +77,26 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         {"Elu", _elu},
         //{"EyeLike",_eye_like}, // TODO (PlaidML): OP WIP
         {"Flatten", _flatten},
-        // new failure {"HardSigmoid", _hard_sigmoid}, TODO (PlaidML): fix brokwn tests (edsl::select cast issue)
+        {"HardSigmoid", _hard_sigmoid},  // TODO (PlaidML): fix brokwn tests (edsl::select cast issue)
         {"LeakyRelu", _leaky_relu},
         {"LogSoftmax", _log_softmax},  // TODO (PlaidML): fix broken tests (2/7 failures)
-        // new failures {"LpNormalization", _lp_normalization}, // failed L1Normalization, L1NormalizationWithValidNegativeAxis
+        //{"LpNormalization", _lp_normalization}, // failed L1Normalization, L1NormalizationWithValidNegativeAxis
         //{"LRN",_lrn}, // TODO (PlaidML): fix broken tests (2/2 failures)
         {"MaxPool", _maxpool},  // TODO (PlaidML): fix broken tests (multiple outputs, attribute handling)
         //{"Mod",_mod}, // TODO (PlaidML): fix broken tests (6/15 failures)
         //{"OneHot",_one_hot}, // TODO (PlaidML): OP WIP
-        // new failures {"ReduceMax", _reduce_max}, // failed tests: ReduceMax_int64
-        // new failures {"ReduceMean", _reduce_mean}, // failed tests: ReduceMean_int32
+        //{"ReduceMax", _reduce_max}, // 1/13 failure, 1 failed test: ReduceMax_int64
+        //{"ReduceMean", _reduce_mean}, // 1/16 failed tests: 1 failed test: ReduceMean_int32
         {"ReduceMin", _reduce_min},
         {"ReduceProd", _reduce_prod},
         {"ReduceSum", _reduce_sum},
         //{"ReverseSequence",_reverse_sequence}, // TODO (PlaidML): OP WIP
         {"Selu", _selu},
         //{"Slice",_slice},
-        //{"Softmax",_softmax}, // TODO (PlaidML): fix broken tests (2/8 failures)
+        //{"Softmax",_softmax}, // TODO (PlaidML): fix broken tests (3/8 failures) (SoftmaxOperator.ThreeDimsAxis0 | SoftmaxOperator.ThreeDimsAxis1 | SoftmaxOperator.DimWithZero)
         //{"Split",_split}, // TODO (PlaidML): failing split OP WIP
         //{"Squeeze",_squeeze}, // TODO (PlaidML): fix broken tests (5/10 failures)(segfault)
-        {"ThresholdedRelu",_thresholded_relu}, // TODO (PlaidML): fix broken tests (new failure! op not registered )
+        {"ThresholdedRelu", _thresholded_relu},
         {"Transpose", _transpose},  // TODO (PlaidML): fix broken tests (8/17 failures)
         {"Unsqueeze", _unsqueeze},
 
@@ -121,9 +121,7 @@ std::vector<plaidml::edsl::Tensor> logical_and(const std::vector<plaidml::edsl::
 
 std::vector<plaidml::edsl::Tensor> logical_not(const std::vector<plaidml::edsl::Value>& args) {
   const auto& I = args[0].as_tensor();
-  auto T = plaidml::edsl::Tensor(true);
-  auto F = plaidml::edsl::Tensor(false);
-  return {plaidml::edsl::select(I, F, T)};
+  return {!I};
 }
 
 std::vector<plaidml::edsl::Tensor> logical_or(const std::vector<plaidml::edsl::Value>& args) {
@@ -228,15 +226,15 @@ std::vector<plaidml::edsl::Tensor> max(const std::vector<plaidml::edsl::Value>& 
 }
 
 // TODO (PlaidML): OP WIP
-// std::vector<plaidml::edsl::Tensor> matmul(const std::vector<plaidml::edsl::Value>& args) {
-//   auto A = args[0].as_tensor();
-//   auto B = args[1].as_tensor();
-//   //numpy style matmul
-//   // if both arguments are 2-D multiply like normal matrices
-//   // if dims > 2
+std::vector<plaidml::edsl::Tensor> matmul(const std::vector<plaidml::edsl::Value>& args) {
+  auto A = args[0].as_tensor();
+  auto B = args[1].as_tensor();
+  //numpy style matmul
+  // if both arguments are 2-D multiply like normal matrices
+  // if dims > 2
 
-//   return {plaidml::op::dot(A,B)};
-// }
+  return {plaidml::op::dot(A, B)};
+}
 
 std::vector<plaidml::edsl::Tensor> mean(const std::vector<plaidml::edsl::Value>& args) {
   int num_tensors = (int)args.size();
@@ -315,8 +313,8 @@ std::vector<plaidml::edsl::Tensor> shape(const std::vector<plaidml::edsl::Value>
 // TODO (PlaidML): fix broken tests (4/5 failures)
 std::vector<plaidml::edsl::Tensor> sign(const std::vector<plaidml::edsl::Value>& args) {
   const auto& I = args[0].as_tensor();
-  auto Z = plaidml::edsl::Tensor(0.0);
-  auto O = plaidml::edsl::Tensor(1.0);
+  auto Z = plaidml::edsl::cast(plaidml::edsl::Tensor(0.0), I.dtype());
+  auto O = plaidml::edsl::cast(plaidml::edsl::Tensor(1.0), I.dtype());
   return {plaidml::edsl::select(I > 0, O, Z) + plaidml::edsl::select(I < 0, -1 * O, Z)};
 }
 
@@ -506,16 +504,15 @@ std::vector<plaidml::edsl::Tensor> _batch_normalization(
   // auto spatial = pnode.get_int_attribute("spatial",0);//opset 8 and below
   // TODO (PlaidML): Handle 'momentum' attribute
   // auto momentum = pnode.get_float_attribute("momentum",0.9);
-  auto epsilon = pnode.get_float_attribute("epsilon",1e-05);
- 
-  while (scale.rank() < X.rank() - 1) 
-  {
+  auto epsilon = pnode.get_float_attribute("epsilon", 1e-05);
+
+  while (scale.rank() < X.rank() - 1) {
     scale = plaidml::op::unsqueeze(scale, {1});
     B = plaidml::op::unsqueeze(B, {1});
     mean = plaidml::op::unsqueeze(mean, {1});
     var = plaidml::op::unsqueeze(var, {1});
   }
-  // if exception encountered return 
+  // if exception encountered return
   return {(scale * ((X - mean) / plaidml::edsl::sqrt(var + epsilon)) + B)};
 }
 
@@ -869,10 +866,11 @@ std::vector<plaidml::edsl::Tensor> _hard_sigmoid(
   auto alpha = pnode.get_float_attribute("alpha", 0.2);
   auto beta = pnode.get_float_attribute("beta", 0.5);
 
-  auto O = plaidml::edsl::Tensor(1.0);
-  auto Z = plaidml::edsl::Tensor(0.0);
-
   auto result = alpha * I + beta;
+
+  auto O = plaidml::edsl::cast(plaidml::edsl::Tensor(1.0), result.dtype());
+  auto Z = plaidml::edsl::cast(plaidml::edsl::Tensor(0.0), result.dtype());
+
   result = plaidml::edsl::select(result > O, O, result);
   result = plaidml::edsl::select(result < Z, Z, result);
 

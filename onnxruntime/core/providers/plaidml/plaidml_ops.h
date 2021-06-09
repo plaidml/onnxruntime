@@ -176,7 +176,7 @@ std::vector<plaidml::edsl::Tensor> _log_softmax(
     const ONNX_NAMESPACE::NodeProto& node,
     const std::vector<plaidml::edsl::Value>& inputs);
 //std::vector<plaidml::edsl::Tensor> lstm(const std::vector<plaidml::edsl::Value>& args);
-//std::vector<plaidml::edsl::Tensor> matmul(const std::vector<plaidml::edsl::Value>& args);
+std::vector<plaidml::edsl::Tensor> matmul(const std::vector<plaidml::edsl::Value>& args);
 //std::vector<plaidml::edsl::Tensor> matmul_integer(const std::vector<plaidml::edsl::Value>& args);
 //std::vector<plaidml::edsl::Tensor> pad(const std::vector<plaidml::edsl::Value>& args);
 std::vector<plaidml::edsl::Tensor> reshape(const std::vector<plaidml::edsl::Value>& args);

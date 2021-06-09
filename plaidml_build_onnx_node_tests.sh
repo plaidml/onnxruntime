@@ -23,9 +23,11 @@ cd build/plaidml/
 # TODO (PlaidML): update all ops to new eDSL API 
 # TODO (PlaidML): update to match new onnx op names 
 ./configure
+source $(conda info --base)/etc/profile.d/conda.sh
 conda activate .cenv/
-bazelisk build //plaidml:plaidml
+ninja -C build-x86_64/Release check-smoke
 conda deactivate
+
 # Set environment variables so that onnxruntime can find plaidml 
 export TODO_TEMP_PLAIDML_DIR=$PWD
 export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.so
