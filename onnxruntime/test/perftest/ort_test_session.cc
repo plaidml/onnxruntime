@@ -373,6 +373,7 @@ OnnxRuntimeTestSession::OnnxRuntimeTestSession(Ort::Env& env, std::random_device
     Ort::ThrowOnError(OrtSessionOptionsAppendExecutionProvider_MIGraphX(session_options, 0));
 #else
     ORT_THROW("MIGraphX is not supported in this build\n");
+#endif
   }else if (provider_name == onnxruntime::kPlaidMLExecutionProvider) {
 #ifdef USE_PLAIDML
    Ort::ThrowOnError(OrtSessionOptionsAppendExecutionProvider_PlaidML(session_options));

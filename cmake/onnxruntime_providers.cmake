@@ -92,11 +92,11 @@ endif()
 if(onnxruntime_USE_ROCM)
   set(PROVIDERS_ROCM onnxruntime_providers_rocm)  
 endif()
-
 if(onnxruntime_USE_PLAIDML)
   set(PROVIDERS_PLAIDML onnxruntime_providers_plaidml)
   list(APPEND ONNXRUNTIME_PROVIDER_NAMES plaidml)
 endif()
+
 source_group(TREE ${ONNXRUNTIME_ROOT}/core FILES ${onnxruntime_providers_common_srcs} ${onnxruntime_providers_srcs})
 
 set(onnxruntime_providers_src ${onnxruntime_providers_common_srcs} ${onnxruntime_providers_srcs})
@@ -985,6 +985,31 @@ if (onnxruntime_USE_ARMNN)
   set_target_properties(onnxruntime_providers_armnn PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
+if (onnxruntime_USE_PLAIDML)
+  add_definitions(-DUSE_PLAIDML=1)
+  file(GLOB_RECURSE onnxruntime_providers_plaidml_cc_srcs CONFIGURE_DEPENDS
+    "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.h"
+    "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.cc"
+  )
+
+  source_group(TREE ${ONNXRUNTIME_ROOT}/core FILES ${onnxruntime_providers_plaidml_cc_srcs})
+  add_library(onnxruntime_providers_plaidml ${onnxruntime_providers_plaidml_cc_srcs})
+  onnxruntime_add_include_to_target(onnxruntime_providers_plaidml onnxruntime_common onnxruntime_framework onnx onnx_proto protobuf::libprotobuf)
+  # TODO: Verify add_dependencies as follows is right
+  add_dependencies(onnxruntime_providers_plaidml ${onnxruntime_EXTERNAL_DEPENDENCIES})
+
+  set_target_properties(onnxruntime_providers_plaidml PROPERTIES FOLDER "ONNXRuntime")
+  set_target_properties(onnxruntime_providers_plaidml PROPERTIES LINKER_LANGUAGE CXX)
+
+  # TODO: This is a HACK to just get something running. It requires setting some awkward temporary environment variables
+  # To make the hack work: Make sure the temp env vars are set. First to root of PlaidML source;
+  #       second to library location (which should be something your mac can find eg ~/lib)
+  target_include_directories(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_DIR})
+  target_link_libraries(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_LIB_DIR})
+
+
+endif()
+
 if (onnxruntime_USE_ROCM)
   add_definitions(-DUSE_ROCM=1)
 
@@ -1113,31 +1138,8 @@ if (onnxruntime_USE_ROCM)
   add_dependencies(onnxruntime_providers_rocm ${onnxruntime_EXTERNAL_DEPENDENCIES})
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/../include/onnxruntime/core/providers/hip  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/onnxruntime/core/providers)
   set_target_properties(onnxruntime_providers_rocm PROPERTIES LINKER_LANGUAGE CXX)
-if (onnxruntime_USE_PLAIDML)
-  add_definitions(-DUSE_PLAIDML=1)
-  file(GLOB_RECURSE onnxruntime_providers_plaidml_cc_srcs CONFIGURE_DEPENDS
-    "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.h"
-    "${ONNXRUNTIME_ROOT}/core/providers/plaidml/*.cc"
-  )
-
-  source_group(TREE ${ONNXRUNTIME_ROOT}/core FILES ${onnxruntime_providers_plaidml_cc_srcs})
-  add_library(onnxruntime_providers_plaidml ${onnxruntime_providers_plaidml_cc_srcs})
-  onnxruntime_add_include_to_target(onnxruntime_providers_plaidml onnxruntime_common onnxruntime_framework onnx onnx_proto protobuf::libprotobuf)
-  # TODO: Verify add_dependencies as follows is right
-  add_dependencies(onnxruntime_providers_plaidml ${onnxruntime_EXTERNAL_DEPENDENCIES})
-
-  set_target_properties(onnxruntime_providers_plaidml PROPERTIES FOLDER "ONNXRuntime")
-  set_target_properties(onnxruntime_providers_plaidml PROPERTIES LINKER_LANGUAGE CXX)
-
-  # TODO: This is a HACK to just get something running. It requires setting some awkward temporary environment variables
-  # To make the hack work: Make sure the temp env vars are set. First to root of PlaidML source;
-  #       second to library location (which should be something your mac can find eg ~/lib)
-  target_include_directories(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_DIR})
-  target_link_libraries(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_LIB_DIR})
-
-
+  
 endif()
 
-if (onnxruntime_ENABLE_MICROSOFT_INTERNAL)
-  include(onnxruntime_providers_internal.cmake)
-endif()
+
+

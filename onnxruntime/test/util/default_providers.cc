@@ -155,6 +155,11 @@ std::unique_ptr<IExecutionProvider> DefaultCoreMLExecutionProvider() {
   uint32_t coreml_flags = 0;
   coreml_flags |= COREML_FLAG_USE_CPU_ONLY;
   return CreateExecutionProviderFactory_CoreML(coreml_flags)->CreateProvider();
+#else
+  return nullptr;
+#endif
+}
+
 std::unique_ptr<IExecutionProvider> DefaultPlaidMLExecutionProvider() {
 #ifdef USE_PLAIDML
   return CreateExecutionProviderFactory_PlaidML()->CreateProvider();

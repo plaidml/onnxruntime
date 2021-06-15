@@ -469,6 +469,8 @@ endif()
 
 if(onnxruntime_USE_ARMNN)
   list(APPEND onnxruntime_test_providers_dependencies onnxruntime_providers_armnn)
+endif()
+
 if(onnxruntime_USE_PLAIDML)
   list(APPEND onnxruntime_test_providers_dependencies onnxruntime_providers_plaidml)
 endif()

@@ -23,10 +23,13 @@ source $(conda info --base)/etc/profile.d/conda.sh
 conda activate .cenv/
 ninja -C build-x86_64/Release check-smoke
 conda deactivate
+
 # Set environment variables so that onnxruntime can find plaidml 
 export TODO_TEMP_PLAIDML_DIR=$PWD
 
 export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/build-x86_64/Release/bin/libplaidml.so.1
+
+cd ../../
 
 # Build onnxruntime with plaidml execution provider support 
 ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --use_plaidml
