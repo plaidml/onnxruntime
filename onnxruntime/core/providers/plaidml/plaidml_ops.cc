@@ -44,12 +44,12 @@ std::map<std::string, OpFunction> kSupportedOps = {
     //{"Pow", pow}, // TODO (PlaidML): fix broken tests (double) new->(int64, int32)
     {"PRelu", prelu},
     {"Reciprocal", reciprocal},
-    {"Relu", relu},
+    //{"Relu", relu},
     //{"Reshape", reshape}, // TODO (PlaidML): OP WIP
     {"SampleOp", sample_op},
     //{"Shape", shape}, // TODO (PlaidML): fix broken tests (11/11 failures) incorrect values produced
     {"Sigmoid", sigmoid},
-    {"Sign", sign},  // TODO (PlaidML): fix broken tests (4/5 failures) double uint64 int64 float16 are broken, float works
+    //{"Sign", sign},  // TODO (PlaidML): fix broken tests (4/5 failures) double uint64 int64 float16 are broken, float works
     {"Sin", sin},
     {"Sinh", sinh},
     {"Sqrt", sqrt},
@@ -89,7 +89,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"ReduceMean", _reduce_mean}, // 1/16 failed tests: 1 failed test: ReduceMean_int32
         {"ReduceMin", _reduce_min},
         {"ReduceProd", _reduce_prod},
-        {"ReduceSum", _reduce_sum},
+        //{"ReduceSum", _reduce_sum},
         //{"ReverseSequence",_reverse_sequence}, // TODO (PlaidML): OP WIP
         {"Selu", _selu},
         //{"Slice",_slice},
@@ -98,7 +98,7 @@ std::map<std::string, _OpFunction> _kSupportedOps =
         //{"Squeeze",_squeeze}, // TODO (PlaidML): fix broken tests (5/10 failures)(segfault)
         {"ThresholdedRelu", _thresholded_relu},
         {"Transpose", _transpose},  // TODO (PlaidML): fix broken tests (8/17 failures)
-        {"Unsqueeze", _unsqueeze},
+        //{"Unsqueeze", _unsqueeze},
 
 };
 

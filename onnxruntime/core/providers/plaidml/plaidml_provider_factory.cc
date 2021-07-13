@@ -14,10 +14,10 @@ namespace onnxruntime {
 struct PlaidMLProviderFactory : IExecutionProviderFactory {
   PlaidMLProviderFactory() = default;
   ~PlaidMLProviderFactory() = default;
-
+ 
   std::unique_ptr<IExecutionProvider> CreateProvider() override {
     PlaidMLExecutionProviderInfo info{};
-    return onnxruntime::make_unique<PlaidMLExecutionProvider>(info);
+    return std::make_unique<PlaidMLExecutionProvider>(info);
   }
 };
 

@@ -67,20 +67,21 @@ void add_feeds(NameMLValMap& feeds, std::string name, std::vector<int64_t> dims,
   feeds.insert(std::make_pair(name, ml_value));
 }
 
-TEST(PlaidMLExecutionProviderTest, Basic_Test) {
-  NameMLValMap feeds;
-  add_feeds(feeds, "A", {4}, {1.0f, 2.0f, 3.0f, 4.0f});
-  add_feeds(feeds, "B", {4}, {2.0f, 2.0f, 2.0f, 2.0f});
+// TODO: ngraph basic test file has been removed so this no longer works. Check if this is a required test. 
+// TEST(PlaidMLExecutionProviderTest, Basic_Test) {
+//   NameMLValMap feeds;
+//   add_feeds(feeds, "A", {4}, {1.0f, 2.0f, 3.0f, 4.0f});
+//   add_feeds(feeds, "B", {4}, {2.0f, 2.0f, 2.0f, 2.0f});
 
-  std::vector<std::vector<float>> expected_values = {
-      {4.0f, 8.0f, 12.0f, 16.0f}};
+//   std::vector<std::vector<float>> expected_values = {
+//       {4.0f, 8.0f, 12.0f, 16.0f}};
 
-  std::vector<std::vector<int64_t>> expected_shapes = {
-      {4}};
+//   std::vector<std::vector<int64_t>> expected_shapes = {
+//       {4}};
 
-  // TODO: We're borrowing nGraph test data just to get something basic going, but switch to our own network & inputs eventually
-  RunTest("testdata/ngraph/Basic_Test.onnx", feeds, {"Z"}, expected_shapes, expected_values, GetEnvironment());
-}
+//   // TODO: We're borrowing nGraph test data just to get something basic going, but switch to our own network & inputs eventually
+//   RunTest("testdata/ngraph/Basic_Test.onnx", feeds, {"Z"}, expected_shapes, expected_values, GetEnvironment());
+// }
 
 TEST(PlaidMLExecutionProviderTest, AddTest)
 {

@@ -14,15 +14,15 @@ START=$(date +%s)
 # TODO (PlaidML): - this should be done in .gitmodules and the build instructions 
 # added to onnxruntime OR post plaidml-v1 release the user will be instructed to
 # install plaidml-v1 through pip    
-git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git ./build/plaidml
+#git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git ./build/plaidml
 cd build/plaidml/
 
-./configure
+# ./configure
 
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate .cenv/
-ninja -C build-x86_64/Release check-smoke
-conda deactivate
+# source $(conda info --base)/etc/profile.d/conda.sh
+# conda activate .cenv/
+# ninja -C build-x86_64/Release check-smoke
+# conda deactivate
 
 # Set environment variables so that onnxruntime can find plaidml 
 export TODO_TEMP_PLAIDML_DIR=$PWD

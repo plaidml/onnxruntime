@@ -15,12 +15,11 @@ PlaidMLExecutionProvider::PlaidMLExecutionProvider(const PlaidMLExecutionProvide
 
   // This Allocator setup is ported fairly directly from the OpenVINO version.
   // TODO (PlaidML): Verify that this is the approach we want to take.
-  DeviceAllocatorRegistrationInfo device_info(
-      {OrtMemTypeDefault,
-       [](int) {
-         return std::make_unique<CPUAllocator>(OrtMemoryInfo(PLAIDML, OrtDeviceAllocator));
+  AllocatorCreationInfo device_info(
+      {[](int) {
+         return std::make_unique<CPUAllocator>(OrtMemoryInfo(PLAIDML, OrtAllocatorType::OrtDeviceAllocator));
        },
-       std::numeric_limits<size_t>::max()});
+       std::numeric_limits<short int>::max()});
   InsertAllocator(CreateAllocator(device_info));
 }
 
@@ -86,7 +85,7 @@ std::vector<std::unique_ptr<ComputeCapability>> PlaidMLExecutionProvider::GetCap
   }
 
   // This was modeled off of the metadata that nGraph included
-  auto meta_def = onnxruntime::make_unique<IndexedSubGraph::MetaDef>();
+  auto meta_def = std::make_unique<IndexedSubGraph::MetaDef>();
   meta_def->name = "PlaidML_Fully_Fused_Graph";
   meta_def->domain = kPlaidMLDomain;
   meta_def->since_version = 1;
@@ -94,10 +93,10 @@ std::vector<std::unique_ptr<ComputeCapability>> PlaidMLExecutionProvider::GetCap
   meta_def->inputs = inputs;
   meta_def->outputs = outputs;
 
-  std::unique_ptr<IndexedSubGraph> sub_graph = onnxruntime::make_unique<IndexedSubGraph>();
+  std::unique_ptr<IndexedSubGraph> sub_graph = std::make_unique<IndexedSubGraph>();
   sub_graph->nodes = graph_viewer.GetNodesInTopologicalOrder();
-  sub_graph->SetMetaDef(meta_def);
-  result.push_back(onnxruntime::make_unique<ComputeCapability>(std::move(sub_graph)));
+  sub_graph->SetMetaDef(std::move(meta_def));
+  result.push_back(std::make_unique<ComputeCapability>(std::move(sub_graph)));
 
   return result;
 }

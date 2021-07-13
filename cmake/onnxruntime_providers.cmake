@@ -1004,7 +1004,7 @@ if (onnxruntime_USE_PLAIDML)
   # TODO: This is a HACK to just get something running. It requires setting some awkward temporary environment variables
   # To make the hack work: Make sure the temp env vars are set. First to root of PlaidML source;
   #       second to library location (which should be something your mac can find eg ~/lib)
-  target_include_directories(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_DIR})
+  target_include_directories(onnxruntime_providers_plaidml PRIVATE ${ONNXRUNTIME_ROOT} $ENV{TODO_TEMP_PLAIDML_DIR})
   target_link_libraries(onnxruntime_providers_plaidml PRIVATE $ENV{TODO_TEMP_PLAIDML_LIB_DIR})
 
 

@@ -18,19 +18,19 @@ START=$(date +%s)
 # added to onnxruntime OR post plaidml-v1 release the user will be instructed to
 # install plaidml-v1 through pip    
 
-git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git ./build/plaidml
+#git clone --recursive --branch plaidml-v1 https://github.com/plaidml/plaidml.git ./build/plaidml
 cd build/plaidml/
 # TODO (PlaidML): update all ops to new eDSL API 
 # TODO (PlaidML): update to match new onnx op names 
-./configure
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate .cenv/
-ninja -C build-x86_64/Release check-smoke
-conda deactivate
+# ./configure
+# source $(conda info --base)/etc/profile.d/conda.sh
+# conda activate .cenv/
+# ninja -C build-x86_64/Release check-smoke
+# conda deactivate
 
 # Set environment variables so that onnxruntime can find plaidml 
 export TODO_TEMP_PLAIDML_DIR=$PWD
-export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/bazel-bin/plaidml/libplaidml.so
+export TODO_TEMP_PLAIDML_LIB_DIR=$PWD/build-x86_64/Release/bin/libplaidml.so.1
 # TODO (PlaidML): temp fix for local build on mac -> place libplaidml.so into ~/lib to get past 
 # dyld: library not loaded error. This needs to be investigated and fixed when mac machines are 
 # added to pipeline
@@ -38,6 +38,7 @@ cd ../../
 # Build onnxruntime with plaidml execution provider support 
 ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --use_plaidml
 
+pip install numpy
 
 #install onnx 
 pip install onnx 
